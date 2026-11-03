@@ -4,7 +4,7 @@
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   if (!heading || !portrait) return;
   if (!motion.matches) {
-    heading.setAttribute('aria-label', 'Сайты, сервисы и интерфейсы.');
+    heading.setAttribute('aria-label', 'Алексей. Веб-разработчик.');
     const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
