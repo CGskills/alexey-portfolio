@@ -1,0 +1,183 @@
+/* Quiet panels: readable material, a clear desk, one conversation at a time. */
+html.overlay-open{overflow:hidden;scrollbar-gutter:stable}
+#dialog.overlay{width:min(640px,calc(100% - 40px));max-width:none;max-height:min(860px,90dvh);margin:auto;padding:0;overflow:hidden;border:1px solid #dddccf;border-radius:22px;background:#fffdf8;box-shadow:0 24px 100px #26352c30}
+#dialog.overlay[open]{animation:panel-arrive .24s cubic-bezier(.2,.8,.2,1)}
+#dialog.overlay::backdrop{background:#35443a66;backdrop-filter:blur(5px);animation:veil-arrive .2s ease}
+#dialog.overlay .modal-inner{padding:0;display:flex;flex-direction:column;max-height:min(858px,90dvh - 2px);min-height:0}
+#dialog.overlay .modal-top{flex:none;display:flex;align-items:center;gap:20px;margin:0;padding:22px 26px 20px;border-bottom:1px solid #e4e3d8;background:#f8f7ef}
+#dialog.overlay .modal-top>div{min-width:0;flex:1}
+#dialog.overlay .modal-top .eyebrow{font-size:9px;letter-spacing:.12em;line-height:1.6;margin:0 0 6px;color:#687464}
+#dialog.overlay .modal-top h2{font:500 25px/1.3 Lora,Georgia,serif;color:#364639;margin:0;overflow-wrap:anywhere;outline:none}
+#dialog.overlay .modal-close{display:grid;place-items:center;flex:none;width:42px;height:42px;min-height:42px;border:1px solid #d8ddce;border-radius:50%;background:#fffdf8;color:#576b53}
+#dialog.overlay .modal-close:hover{background:#e9edde}
+#dialog.overlay .modal-scroll{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c4cbb8 transparent;padding:24px 26px 26px;min-height:0}
+#dialog.overlay .muted,#dialog.overlay .setting-note,#dialog.overlay .setting-row p{color:#697363}
+#dialog.overlay .setting-note,#dialog.overlay .setting-row p{font-size:12px}
+#dialog.overlay .modal-actions{gap:10px}
+#dialog.overlay .modal-actions .btn{white-space:normal}
+#dialog.overlay .dialogue-text{font:var(--read-size,16px)/1.85 var(--reader-font,Manrope);color:#455443;overflow-wrap:anywhere}
+#dialog.overlay .modal-scroll:focus-visible{outline:2px solid #7c916b;outline-offset:-3px}
+#dialog.overlay-lesson,#dialog.overlay-panel{width:min(760px,calc(100% - 40px))}
+.material-tabs{display:flex;gap:5px;background:#f0f1e7;border:1px solid #e1e5d7;border-radius:11px;padding:5px;margin:0 0 24px}
+.material-tabs button{flex:1;min-width:0;min-height:42px;padding:9px 10px;border-radius:7px;font-size:12px;color:#65745d;line-height:1.5}
+.material-tabs button.active{background:#fffdf8;box-shadow:0 2px 5px #44523b0c;color:#3f5b44;font-weight:700}
+.material-tabs button:hover{background:#e4eadb}
+.lesson-material{font:var(--read-size,16px)/1.8 var(--reader-font,Manrope);color:#4c5948;min-width:0}
+.lesson-material>.learning-section{margin:0;padding:0;border:0}
+.lesson-material .learning-section>.eyebrow{display:none}
+.lesson-material .learning-section h2{font-size:24px;line-height:1.4}
+.lesson-material .practice-preview{padding:20px;border-radius:13px;background:#f0f3e8}
+.lesson-material .theory-step summary{font-size:var(--read-size,16px);line-height:1.7}
+.lesson-material .theory-step p,.lesson-material .task-text{font:var(--read-size,16px)/1.85 var(--reader-font,Manrope);color:#4b5b46}
+.lesson-material .hints-box{margin:0;padding:20px;background:#f4f3e9;border:1px solid #e1e3d5;border-radius:12px}
+.lesson-material .hint{font:var(--read-size,16px)/1.8 var(--reader-font,Manrope)}
+.lesson-material .project-defense{margin:0;padding:0;border:0}
+.lesson-material .lesson-mentor{margin:0}
+.material-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:22px;margin-top:25px;border-top:1px solid #e4e4d8}
+.mission-compact h2{font:500 26px/1.35 Lora,Georgia,serif;margin:20px 0 12px;color:#354b39}
+.mission-caption{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mission-caption .eyebrow{font-size:9px}
+.mission-caption .pill{font-size:10px}
+.mentor-trigger{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#f3f1e6;border:1px solid #e2e3d3;border-radius:11px;padding:9px 12px;margin-top:20px;color:#4b5c43}
+.mentor-trigger .painted-portrait{flex:none;width:43px;height:52px;border-radius:9px;background-color:#f6f0df}
+.mentor-trigger>span:nth-child(2){flex:1;min-width:0}
+.mentor-trigger strong,.mentor-trigger small{display:block}
+.mentor-trigger strong{font-size:14px}
+.mentor-trigger small{font-size:11px;color:#75816b;margin-top:4px}
+.mentor-trigger>.icon{width:17px;flex:none}
+.mentor-trigger:hover{border-color:#b9c5aa;background:#ecefde}
+.mission-compact .task-text{font:var(--read-size,16px)/1.85 var(--reader-font,Manrope);color:#4b5b46;white-space:pre-line;margin:0}
+.lesson-toolbox{display:grid;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid #e4e4d8}
+.lesson-toolbox button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid #e0e3d5;border-radius:10px;background:#fafbf5;padding:12px;color:#53684a}
+.lesson-toolbox button>span:nth-child(2){flex:1}
+.lesson-toolbox strong,.lesson-toolbox small{display:block}
+.lesson-toolbox strong{font-size:13px;color:#465c41}
+.lesson-toolbox small{font-size:11px;line-height:1.5;color:#75816c;margin-top:3px}
+.toolbox-icon{display:grid;place-items:center;background:#eaf0e1;border-radius:9px;width:37px;height:37px;flex:none}
+.toolbox-icon .icon{width:18px}
+.lesson-toolbox button>.icon{width:15px}
+.lesson-toolbox button:hover{border-color:#b5c3a7;background:#f0f4e9}
+.mission-bottom{display:flex;justify-content:space-between;gap:8px;border-top:1px solid #e4e4d8;margin-top:22px;padding-top:15px}
+.mission-bottom .text-btn{font-size:11px}
+.defense-trigger{margin-top:14px}
+.page-lesson .workspace{align-items:start;grid-template-columns:minmax(280px,.8fr) minmax(400px,1.25fr)}
+.page-lesson .mission{padding:22px}
+.page-lesson .lesson-head{margin-bottom:18px}
+.page-lesson .lesson-head h1{font-size:32px}
+.cafe-desk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:22px 0 30px}
+.desk-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:20px;background:#fffdf8;border:1px solid #dde1d2;border-radius:14px;color:#42563e;transition:background .2s,border-color .2s}
+.desk-icon{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:12px;background:#e9eee0;color:#657d53}
+.desk-icon .icon{width:21px;height:21px}
+.desk-card:nth-child(2) .desk-icon{background:#f2e8dc;color:#987552}
+.desk-card:nth-child(4) .desk-icon{background:#eee9dd;color:#8c7c55}
+.desk-card strong{font:500 20px/1.35 Lora,Georgia,serif;margin:17px 0 8px}
+.desk-card small{font-size:12px;line-height:1.7;color:#6e7965;flex:1}
+.desk-open{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:18px;padding-top:13px;border-top:1px solid #e8e8dd;font-size:11px}
+.desk-open .icon{width:16px}
+.desk-card:hover{background:#f4f7ec;border-color:#b2c2a2}
+.systems-summary{display:flex;align-items:center;gap:18px;width:100%;margin:30px 0 10px;padding:20px 24px;border:1px solid #dce3d1;border-radius:14px;background:#edf2e4;text-align:left;color:#4b6343}
+.systems-summary>span:nth-child(2){flex:1;min-width:0}
+.systems-summary strong{display:block;font:500 21px/1.4 Lora,Georgia,serif}
+.systems-summary small{display:block;margin-top:5px;font-size:12px;line-height:1.6;color:#6c7b60}
+.systems-summary:hover{background:#e5edda}
+.cafe-panel-body>.section-heading{margin-top:0}
+.cafe-panel-body .automation-section>.section-heading{display:none}
+.cafe-panel-body .automation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cafe-panel-body .cafe-register{grid-template-columns:1fr;padding:0;margin:0;border:0;background:transparent}
+.cafe-panel-body .register-intro h2{font-size:26px}
+.cafe-panel-body .mira-note{margin-bottom:18px}
+.cafe-panel-body .order-list button{min-height:70px}
+.cafe-panel-body .order-list strong{font-size:14px}
+.cafe-panel-body .order-list small{font-size:12px;line-height:1.7}
+.cafe-panel-body .section-heading h2{font-size:23px}
+/* Portraits still anchor the café, without five large illustrations per row. */
+.cast-grid{gap:12px}
+.cast-image{height:130px}
+.cast-info{padding:13px}
+.cast-info strong{font-size:21px}
+.cast-info>span{display:none}
+.conversation-person{display:flex;align-items:center;gap:18px;margin-bottom:20px}
+.conversation-person>.painted-portrait{width:78px;height:94px;flex:none;border-radius:18px;background-color:#f5efdf;border:1px solid #e7deca}
+.conversation-person>div{min-width:0}
+.conversation-person strong{display:block;font:500 28px/1.3 Lora,Georgia,serif;color:#41553d}
+.conversation-person small{display:block;font-size:12px;color:#6b7762;margin-top:3px}
+.conversation-status{display:flex;align-items:baseline;gap:6px;font-size:10px;line-height:1.6;color:#7b836f;margin-top:9px}
+.conversation-status .dot{width:5px;height:5px;flex:none;background:#91a17c}
+.conversation-message{position:relative;background:#f0f3e8;border:1px solid #dce4d1;padding:20px 22px;border-radius:4px 17px 17px 17px;margin-bottom:24px}
+.conversation-message>.eyebrow{font-size:9px;letter-spacing:.08em;margin-bottom:10px;color:#79876b}
+#dialog.overlay .conversation-message .dialogue-text{margin:0;padding:0;background:transparent;border-radius:0;font-size:var(--read-size,16px);color:#42553e}
+.conversation-topics>.eyebrow{font-size:9px;margin-bottom:10px}
+.conversation .dialogue-choices{display:grid;gap:7px;margin:0}
+.topic-choice{display:flex;gap:12px;align-items:center;width:100%;text-align:left;border:1px solid #e0e3d5;border-radius:10px;background:#fffdf8;padding:12px 14px;min-height:48px;font:13px/1.6 Manrope,system-ui;color:#52674a}
+.topic-choice>span:nth-child(2){flex:1}
+.topic-number{color:#a0a68e;font-size:10px}
+.topic-choice>.icon{width:16px;flex:none;color:#879776}
+.topic-choice:hover,.topic-choice.selected{background:#eef2e5;border-color:#b8c7a7}
+.topic-choice.selected .topic-number{color:#526b44}
+.conversation-footer{display:flex;gap:12px;align-items:center;justify-content:space-between;border-top:1px solid #e4e5d8;margin-top:24px;padding-top:20px}
+.conversation-footer .btn{max-width:80%;font-size:12px;white-space:normal;text-align:center}
+.conversation-footer .text-btn{font-size:12px;flex:none}
+@keyframes panel-arrive{from{opacity:0;transform:translateY(20px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes veil-arrive{from{opacity:0}to{opacity:1}}
+@media(max-width:1150px){.cafe-desk{grid-template-columns:repeat(2,minmax(0,1fr))}.page-lesson .workspace{grid-template-columns:minmax(250px,.8fr) minmax(340px,1.2fr);gap:16px}.page-lesson .mission{padding:18px}.cast-image{height:110px}}
+@media(max-width:1000px){.page-lesson .workspace{grid-template-columns:1fr}.lesson-toolbox{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:18px;padding-top:16px}.lesson-toolbox button{gap:8px;padding:10px}.lesson-toolbox button>.icon,.lesson-toolbox small{display:none}.toolbox-icon{width:30px;height:32px}.mission-compact h2{margin-top:16px}.mission-bottom{margin-top:16px;padding-top:10px}.mentor-trigger{margin-top:14px}.cafe-desk{gap:12px}.systems-summary strong{font-size:20px}}
+@media(max-width:700px){
+ #dialog.overlay,#dialog.overlay-lesson,#dialog.overlay-panel{width:100%;max-height:92dvh;max-width:100%;margin:auto 0 0;border-radius:22px 22px 0 0;border-bottom:0}
+ #dialog.overlay .modal-inner{max-height:92dvh}
+ #dialog.overlay .modal-top{padding:20px 19px 16px;gap:12px;position:relative}
+ #dialog.overlay .modal-top:before{content:'';position:absolute;top:7px;left:calc(50% - 18px);width:36px;height:3px;border-radius:4px;background:#d7ddcd}
+ #dialog.overlay .modal-top h2{font-size:23px;line-height:1.35}
+ #dialog.overlay .modal-top .eyebrow{font-size:8px;letter-spacing:.09em;margin-bottom:5px}
+ #dialog.overlay .modal-scroll{padding:20px 19px max(24px,env(safe-area-inset-bottom))}
+ #dialog.overlay .modal-close{width:40px;height:40px;min-height:40px}
+ .material-tabs{margin-bottom:20px;gap:3px;padding:4px}
+ .material-tabs button{padding:8px 6px;font-size:11px}
+ .material-footer{flex-wrap:wrap;gap:8px}
+ .material-footer .btn{font-size:12px}
+ .lesson-material .learning-section h2{font-size:23px}
+ .lesson-material .practice-preview{padding:16px}
+ .lesson-material .hints-box{padding:15px}
+ .page-lesson .lesson-head h1{font-size:28px}
+ .page-lesson .mission{padding:18px}
+ .mission-compact h2{font-size:24px}
+ .lesson-toolbox{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .lesson-toolbox button{flex-direction:column;align-items:center;text-align:center;gap:7px;padding:10px 3px}
+ .lesson-toolbox strong{font-size:11px}
+ .toolbox-icon{background:transparent;height:25px}
+ .mission-bottom .text-btn{font-size:11px}
+ .cafe-desk{margin:18px 0 24px;gap:10px}
+ .desk-card{padding:16px}
+ .desk-card strong{font-size:21px;margin-top:13px}
+ .desk-card small{font-size:11px}
+ .desk-icon{width:36px;height:36px;border-radius:10px}
+ .desk-open{margin-top:14px;padding-top:10px;font-size:11px}
+ .systems-summary{padding:18px 15px;gap:12px;margin:23px 0 0}
+ .systems-summary strong{font-size:19px}
+ .systems-summary small{font-size:11px}
+ .systems-summary>.icon{width:18px;flex:none}
+ .cast-grid{gap:10px;margin:0 -19px;padding:0 19px 12px}
+ .cast-card{flex-basis:128px}
+ .cast-image{height:140px}
+ .cast-info{padding:12px}
+ .cast-info strong{font-size:20px}
+ .cast-info small{font-size:10px;line-height:1.6}
+ .cast-info>span{display:none}
+ .conversation-person{gap:13px;margin-bottom:18px}
+ .conversation-person>.painted-portrait{width:61px;height:75px;border-radius:12px}
+ .conversation-person strong{font-size:26px}
+ .conversation-person small{font-size:11px}
+ .conversation-status{font-size:9px;margin-top:6px}
+ .conversation-message{padding:17px 18px;margin-bottom:21px}
+ .conversation-message>.eyebrow{font-size:8px}
+ .topic-choice{padding:11px 12px;gap:9px;font-size:12px;min-height:47px}
+ .conversation-footer{margin-top:20px;padding-top:17px;gap:10px}
+ .conversation-footer .btn{font-size:11px;padding:11px 13px}
+ .conversation-footer .text-btn{font-size:11px}
+ .cafe-panel-body .automation-item h3{font-size:20px}
+ .cafe-panel-body .order-list small{font-size:11px}
+ html.overlay-open .mobile-workbench-nav{visibility:hidden}
+}
+@media(prefers-reduced-motion:reduce){#dialog.overlay[open],#dialog.overlay::backdrop{animation:none}}
+.no-motion #dialog.overlay[open],.no-motion #dialog.overlay::backdrop{animation:none}
+
+.cafe-panel-body>.section-heading h2,.cafe-panel-body .register-intro h2{display:none}

@@ -1,0 +1,223 @@
+<section aria-labelledby="qa-lessons-title"><p class="qa-kicker">УЧЕБНИК</p><h2 id="qa-lessons-title">Что изучать тестировщику</h2><p class="qa-intro">Откройте урок, повторите пример и сверьте результат с ожидаемым.</p><details class="qa-lesson">
+  <summary><span class="qa-lesson-index">01</span><span><strong>Основы тестирования и устройство веба</strong><small>Требования, тест-кейсы и HTTP</small></span></summary>
+  <div class="qa-lesson-body">
+    <p>В требованиях к учебному кабинету записано: «Зарегистрированный пользователь с верным паролем видит кабинет. При неверном пароле форма остаётся открытой и показывает ошибку». Так у тестировщика появляется критерий, по которому можно решить, правильно ли работает вход.</p>
+    <h4>Превращаем требование в проверки</h4>
+    <ul>
+      <li><strong>Позитивная проверка.</strong> Введите данные существующей учебной записи. Ожидаемый результат — заголовок «Личный кабинет».</li>
+      <li><strong>Негативная проверка.</strong> Измените один символ пароля. Ожидаемый результат — сообщение об ошибке, доступ к кабинету закрыт.</li>
+      <li><strong>Тест-кейс</strong> фиксирует предусловие, шаги, данные и ожидаемый результат. <strong>Чек-лист</strong> перечисляет проверки короче: верный пароль, неверный пароль, пустое поле, выход из кабинета.</li>
+      <li><strong>Баг</strong> — расхождение между поведением и требованием. В баг-репорте запишите заголовок, версию и окружение, шаги, ожидание и факт. Приложите снимок экрана или ответ сервера, по которому коллега сможет воспроизвести ошибку.</li>
+    </ul>
+    <h4>Выбираем масштаб проверки</h4>
+    <p>Модульный тест (unit) проверяет отдельную функцию, например удаление пробелов вокруг логина. Интеграционный проверяет взаимодействие частей, например сервиса входа с базой. Сквозной тест проходит весь путь от формы до кабинета. Эти уровни отвечают на вопрос «Какую часть системы проверяем?».</p>
+    <p>Функциональное тестирование сверяет поведение с требованиями. Дымовой набор (smoke) быстро проверяет жизненно важные функции новой сборки, включая вход. Регрессионный набор после изменений повторяет проверки уже работающих функций. Одна проверка входа может быть одновременно функциональной, сквозной и частью smoke-набора.</p>
+    <h4>Прослеживаем запрос</h4>
+    <p>Когда вы вводите адрес, браузер находит сервер по имени, устанавливает соединение и запрашивает страницу. Клиент отправляет HTTP-запрос с методом, путём, заголовками и, когда нужно, телом. Сервер отвечает кодом, заголовками и данными. HTTPS защищает обмен с помощью TLS. Откройте «Сеть» (Network) в инструментах разработчика, обновите страницу и найдите запрос документа.</p>
+    <p><code>GET</code> получает ресурс, <code>POST</code> передаёт данные на обработку, <code>PUT</code> задаёт новое представление ресурса по известному адресу, <code>DELETE</code> удаляет ресурс. Код <code>200</code> означает успех, <code>400</code> — ошибочный запрос, <code>401</code> — требуется успешная аутентификация, <code>404</code> — ресурс не найден, <code>500</code> — внутренняя ошибка сервера. Для конкретного действия ожидаемый код берут из договора о работе API.</p>
+    <h4>Практика</h4>
+    <p>Представьте, что после ввода неверного пароля открывается кабинет. Составьте баг-репорт для разработчика. Проверьте себя: из записи понятно, что учётная запись существует, какой один шаг воспроизводит дефект и какой доступ был получен вопреки требованию.</p>
+  </div>
+</details>
+<details class="qa-lesson">
+  <summary><span class="qa-lesson-index">02</span><span><strong>Python для тестовых данных</strong><small>Типы, функции, файлы и классы</small></span></summary>
+  <div class="qa-lesson-body">
+    <p>Создайте папку для упражнений. В этом уроке вы напишете модуль <code>accounts.py</code>, который понадобится в следующем. Правило учебного сервиса простое: «При сравнении логинов регистр и пробелы по краям не учитываются».</p>
+    <pre><code># accounts.py
+def normalize_login(value):
+    return value.strip().casefold()
+
+if __name__ == "__main__":
+    for raw in ["  MIRA ", "mira", "   "]:
+        login = normalize_login(raw)
+        if login:
+            print(login)
+        else:
+            print("Пустой логин")</code></pre>
+    <p>Запустите <code>python accounts.py</code>. Переменная <code>raw</code> по очереди указывает на три строки. Функция принимает аргумент <code>value</code> и возвращает обработанную строку. Пустая строка считается ложным значением в <code>if</code>. На экране появятся две строки <code>mira</code> и одна строка <code>Пустой логин</code>. Блок с <code>__name__</code> позволяет импортировать функцию в тест без печати примеров.</p>
+    <h4>Выбираем форму данных</h4>
+    <p>Список <code>["mira", "anton"]</code> хранит упорядоченный набор логинов, словарь <code>{"login": "mira", "active": True}</code> — поля одной записи, кортеж <code>(" MIRA ", "mira")</code> — неизменяемую пару входа и ожидания, множество <code>{"admin", "reader"}</code> — уникальные роли. Цикл <code>for</code> перебирает готовые данные. <code>while</code> повторяет действие, пока условие истинно. Например, после каждой попытки увеличить <code>attempt</code> на один и остановиться при <code>attempt == 3</code>.</p>
+    <h4>Читаем файлы и разбираем ошибки</h4>
+    <p>Модуль — файл Python с функциями или классами. В стандартной библиотеке <code>json.load</code> читает JSON-объекты и массивы, <code>csv.DictReader</code> читает строки CSV по названиям столбцов, <code>xml.etree.ElementTree.parse</code> разбирает дерево XML. Создайте рядом файл <code>user.json</code> с содержимым <code>{"login": " MIRA "}</code>. Сохраните этот пример в той же папке и запустите его из неё.</p>
+    <pre><code>import json
+from accounts import normalize_login
+
+try:
+    with open("user.json", encoding="utf-8") as source:
+        user = json.load(source)
+except FileNotFoundError:
+    print("Создайте user.json рядом со скриптом")
+except json.JSONDecodeError:
+    print("Проверьте кавычки и запятые в JSON")
+else:
+    print(normalize_login(user["login"]))</code></pre>
+    <p><code>try/except</code> различает два конкретных сбоя подготовки данных. При корректном файле появится <code>mira</code>. Ошибка самого тестового утверждения должна оставаться видимой тому, кто запустил проверку.</p>
+    <h4>Зачем автоматизатору ООП</h4>
+    <p>Класс <code>LoginPage</code> описывает форму входа, объект <code>LoginPage(browser)</code> представляет её в конкретном браузере. Метод <code>sign_in()</code> скрывает поиск полей и нажатие кнопки — это инкапсуляция. Класс <code>LoginPage(BasePage)</code> может унаследовать общее действие открытия страницы. Если обычная и мобильная формы по-разному реализуют один метод <code>sign_in()</code>, тест может вызывать его одинаково — это полиморфизм.</p>
+    <h4>Практика</h4>
+    <p>Добавьте строку <code>" An Ton "</code> к примерам в модуле. До запуска запишите ожидаемое значение. Должно получиться <code>an ton</code>: пробел внутри логина сохранился. Вопрос к автору требования — нужно ли считать такой логин допустимым?</p>
+  </div>
+</details>
+<details class="qa-lesson">
+  <summary><span class="qa-lesson-index">03</span><span><strong>Первые автотесты в pytest и unittest</strong><small>Фикстуры, параметры и отчёт о падении</small></span></summary>
+  <div class="qa-lesson-body">
+    <p>Ожидаемое значение удобно записать прямо в программе. В папке с <code>accounts.py</code> создайте виртуальное окружение командой <code>python -m venv .venv</code>. В PowerShell активируйте его командой <code>.\.venv\Scripts\Activate.ps1</code>, в macOS или Linux — <code>source .venv/bin/activate</code>. Установите pytest командой <code>python -m pip install pytest</code>.</p>
+    <pre><code># test_accounts.py
+import pytest
+from accounts import normalize_login
+
+@pytest.fixture
+def account():
+    return {"login": " Mira ", "active": True}
+
+def test_active_account(account):
+    assert account["active"]
+    assert normalize_login(account["login"]) == "mira"
+
+@pytest.mark.parametrize("raw, expected", [
+    (" MIRA ", "mira"),
+    ("An Ton", "an ton"),
+    ("   ", ""),
+])
+def test_normalize_login(raw, expected):
+    assert normalize_login(raw) == expected</code></pre>
+    <p>Запустите <code>python -m pytest -q test_accounts.py</code>. pytest найдёт функции с префиксом <code>test_</code>. Фикстура передаст свежий словарь в первый тест. Параметризация создаст три отдельных случая из одной функции. Итог — четыре успешные проверки. Общие фикстуры одного набора можно вынести в <code>conftest.py</code>. Плагин <code>pytest-xdist</code> после установки добавляет параллельный запуск через <code>-n 2</code>; у параллельных тестов должны быть независимые данные.</p>
+    <h4>Тот же контракт в стандартной библиотеке</h4>
+    <pre><code># test_classic.py
+import unittest
+from accounts import normalize_login
+
+class LoginTests(unittest.TestCase):
+    def test_spaces_and_case(self):
+        self.assertEqual(normalize_login(" MIRA "), "mira")</code></pre>
+    <p><code>python -m unittest test_classic</code> запустит один тест. Здесь проверки собраны в класс, а значения сравнивает метод <code>assertEqual</code>. При работе со старым проектом вы также встретите <code>setUp</code> и <code>tearDown</code> для подготовки и очистки перед каждым случаем и после него.</p>
+    <h4>Практика</h4>
+    <p>Временно уберите <code>.strip()</code> из функции и снова выполните команду pytest. Найдите в отчёте входную строку и различие между фактом и ожиданием. Проверьте себя: случай <code>"An Ton"</code> пройдёт, три других проверки упадут. Верните обработку пробелов и получите четыре успешных результата. <a href="https://docs.pytest.org/en/stable/how-to/parametrize.html">Примеры параметризации в документации pytest</a></p>
+  </div>
+</details>
+<details class="qa-lesson">
+  <summary><span class="qa-lesson-index">04</span><span><strong>Проверка формы в браузере</strong><small>Selenium, локаторы и ожидания</small></span></summary>
+  <div class="qa-lesson-body">
+    <p>Selenium WebDriver управляет браузером. Автотест открывает страницу, находит элементы, выполняет действия и проверяет видимый результат. Построим локальный макет формы, чтобы результат зависел только от вашего кода. Сохраните этот текст в <code>login.html</code> рядом с тестами.</p>
+    <pre><code>&lt;!doctype html&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;label&gt;Логин &lt;input id="login"&gt;&lt;/label&gt;
+&lt;label&gt;Пароль &lt;input id="password" type="password"&gt;&lt;/label&gt;
+&lt;button id="submit"&gt;Войти&lt;/button&gt;
+&lt;p id="result"&gt;&lt;/p&gt;
+&lt;script&gt;
+  const field = id =&gt; document.getElementById(id);
+  field("submit").onclick = () =&gt; {
+    const ok = field("login").value === "mira"
+      &amp;&amp; field("password").value === "demo";
+    field("result").textContent = ok ? "Личный кабинет" : "Ошибка входа";
+  };
+&lt;/script&gt;</code></pre>
+    <p>Для примера нужен установленный Chrome. Установите Selenium командой <code>python -m pip install selenium</code>; при первом запуске Selenium Manager может загрузить драйвер. Рядом с макетом сохраните файл <code>test_ui.py</code>.</p>
+    <pre><code>from pathlib import Path
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+def test_login_opens_cabinet():
+    url = Path(__file__).with_name("login.html").resolve().as_uri()
+    with webdriver.Chrome() as browser:
+        browser.get(url)
+        browser.find_element(By.CSS_SELECTOR, "#login").send_keys("mira")
+        browser.find_element(By.ID, "password").send_keys("demo")
+        browser.find_element(By.XPATH, "//button[.='Войти']").click()
+        result = (By.ID, "result")
+        WebDriverWait(browser, 5).until(
+            EC.text_to_be_present_in_element(result, "Личный кабинет")
+        )</code></pre>
+    <p>Команда <code>python -m pytest -q test_ui.py</code> откроет и закроет браузер. CSS-селектор <code>#login</code> находит элемент по идентификатору, XPath ищет кнопку с текстом. Явное ожидание даёт странице до пяти секунд показать результат и завершится раньше, как только условие выполнится. Для устойчивых локаторов выбирайте стабильные атрибуты или доступные имена элементов. <a href="https://www.selenium.dev/documentation/webdriver/waits/">Ожидания в Selenium</a></p>
+    <p>У Playwright есть Python API. Те же действия можно выразить как <code>page.get_by_label("Логин").fill("mira")</code> и <code>page.get_by_role("button", name="Войти").click()</code>. Cypress — ещё один браузерный инструмент, его тесты пишут на JavaScript или TypeScript. В Python-проекте сторонняя обёртка может запускать Cypress как отдельную команду; для записи самих сценариев на Python подходят Selenium и Playwright. <a href="https://playwright.dev/python/docs/locators">Локаторы в Playwright</a> · <a href="https://docs.cypress.io/app/get-started/why-cypress">Документация Cypress</a></p>
+    <h4>Практика</h4>
+    <p>Скопируйте функцию, дайте ей имя <code>test_wrong_password</code> и введите пароль <code>other</code>. Подставьте в ожидание текст «Ошибка входа». При запуске файла должны пройти две проверки. Затем вручную измените надпись кнопки: ошибка поиска элемента покажет, насколько XPath с текстом зависит от интерфейса.</p>
+  </div>
+</details>
+<details class="qa-lesson">
+  <summary><span class="qa-lesson-index">05</span><span><strong>Проверка API через Requests</strong><small>Контракт, статус ответа и данные</small></span></summary>
+  <div class="qa-lesson-body">
+    <p>UI-тест видит результат на экране. API-тест обращается непосредственно к серверу и сверяет статус и поля ответа с контрактом. Допустим, клиент учебного банка ожидает получить баланс кошелька № 7 в копейках. Проверять один код <code>200</code> недостаточно: сервер может вернуть верный статус и ошибочную сумму.</p>
+    <h4>Поднимаем учебный сервер</h4>
+    <p>Создайте папку <code>api_demo</code> и сохраните в ней файл <code>wallet.json</code> с содержимым <code>{"id": 7, "balance_kopecks": 12500, "currency": "RUB"}</code>. Из родительской папки запустите <code>python -m http.server 8765 --bind 127.0.0.1 --directory api_demo</code>. Этот локальный сервер выдаёт подготовленный JSON по GET. Для теста откройте второй терминал в той же родительской папке и активируйте окружение.</p>
+    <pre><code># test_api.py
+import pytest
+import requests
+
+@pytest.fixture
+def base_url():
+    return "http://127.0.0.1:8765"
+
+def test_wallet_balance(base_url):
+    reply = requests.get(f"{base_url}/wallet.json", timeout=3)
+    assert reply.status_code == 200
+    assert reply.headers["Content-Type"].startswith("application/json")
+    wallet = reply.json()
+    assert wallet["id"] == 7
+    assert wallet["balance_kopecks"] == 12500
+    assert wallet["currency"] == "RUB"
+
+def test_missing_wallet(base_url):
+    reply = requests.get(f"{base_url}/missing.json", timeout=3)
+    assert reply.status_code == 404</code></pre>
+    <p>Выполните <code>python -m pip install requests pytest</code> и <code>python -m pytest -q test_api.py</code>. Пройдут два теста. В серверном терминале будут видны пути и коды обоих запросов. По окончании нажмите там <code>Ctrl+C</code>.</p>
+    <p>Для организации API-тестов иногда используют плагины семейства pytest-requests. Здесь ту же задачу решает связка pytest, Requests и фикстур: адрес сервера хранится в одном месте, ожидания остаются в конкретных тестах. Для API, которое принимает новые записи, <code>requests.post(url, json=fields, timeout=3)</code> отправит JSON. Методы <code>requests.put</code> и <code>requests.delete</code> пригодятся для замены и удаления записи. Коды и итоговое состояние проверяйте по контракту настоящего сервиса. <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Запросы и ответы в Requests</a></p>
+    <h4>Практика</h4>
+    <p>Поменяйте в файле сумму на <code>125</code> и повторите запуск. Сервер вернёт <code>200</code>, а тест покажет расхождение в сто раз. Запишите в баг-репорт сумму в копейках вместе с единицей измерения. Верните исходное значение.</p>
+  </div>
+</details>
+<details class="qa-lesson">
+  <summary><span class="qa-lesson-index">06</span><span><strong>Git, данные и запуск тестов в команде</strong><small>SQL, Docker, Allure и CI/CD</small></span></summary>
+  <div class="qa-lesson-body">
+    <p>Вы уже проверили функцию, интерфейс и ответ сервера. Теперь коллега должен суметь получить тот же код, воспроизвести результат и понять причину падения.</p>
+    <h4>Git и хостинг кода</h4>
+    <p>В учебной папке выполните <code>git init</code>, затем <code>git status</code>. Командой <code>git add accounts.py test_accounts.py</code> подготовьте два файла, а <code>git commit -m "Проверить нормализацию логина"</code> сохранит снимок. Если Git запрашивает автора, укажите свои имя и email в настройках этого репозитория. Создайте пустой проект на GitHub или GitLab и скопируйте его адрес. После <code>git remote add origin АДРЕС</code> и <code>git branch -M main</code> выполните <code>git push -u origin main</code>. Позднее <code>git pull</code> получит изменения коллеги.</p>
+    <h4>SQL и проверка записи из Python</h4>
+    <p>В SQL команда <code>INSERT</code> добавляет данные, <code>SELECT</code> выбирает столбцы, <code>WHERE</code> задаёт условие, <code>JOIN</code> связывает строки таблиц по ключу. Сохраните и запустите пример: SQLite создаст отдельную базу в памяти на время упражнения.</p>
+    <pre><code>import sqlite3
+
+db = sqlite3.connect(":memory:")
+db.executescript("""
+    CREATE TABLE users (id INTEGER PRIMARY KEY, login TEXT);
+    CREATE TABLE wallets (user_id INTEGER, kopecks INTEGER);
+    INSERT INTO users VALUES (7, 'mira');
+    INSERT INTO wallets VALUES (7, 12500);
+""")
+row = db.execute("""
+    SELECT users.login, wallets.kopecks
+    FROM users JOIN wallets ON users.id = wallets.user_id
+    WHERE users.login = ?
+""", ("mira",)).fetchone()
+assert row == ("mira", 12500)
+print(row)
+db.close()</code></pre>
+    <p>В результате появится <code>('mira', 12500)</code>. Замените значение параметра на <code>"anton"</code>. Теперь <code>fetchone()</code> вернёт <code>None</code>: подходящей строки нет. Параметр <code>?</code> позволяет передать логин отдельно от текста SQL.</p>
+    <h4>Воспроизводимое окружение в Docker</h4>
+    <p>Контейнер запускает тест с выбранной версией Python и своими зависимостями. При установленном Docker сохраните рядом с модулем файл <code>Dockerfile</code>:</p>
+    <pre><code>FROM python:3.12-slim
+WORKDIR /tests
+COPY accounts.py test_accounts.py ./
+RUN python -m pip install pytest
+CMD ["python", "-m", "pytest", "-q", "test_accounts.py"]</code></pre>
+    <p>Соберите образ командой <code>docker build -t qa-evening .</code> и запустите <code>docker run --rm qa-evening</code>. В результатах будут те же четыре успешные проверки. В командном проекте зафиксируйте проверенные версии зависимостей.</p>
+    <h4>От отчёта до CI/CD</h4>
+    <p>Установите <code>allure-pytest</code> командой <code>python -m pip install allure-pytest</code>. Запуск <code>python -m pytest test_accounts.py --alluredir=allure-results</code> запишет данные для отчёта. Если установлена утилита Allure Report 2, <code>allure serve allure-results</code> откроет отчёт: выберите случай и посмотрите входные данные и утверждение. <a href="https://allurereport.org/docs/pytest/">Настройка Allure для pytest</a></p>
+    <p>CI запускает такие проверки по событию в репозитории. На GitHub сохраните этот файл как <code>.github/workflows/qa.yml</code> и отправьте его вместе с Dockerfile, модулем и тестами:</p>
+    <pre><code>name: QA
+on: [push, pull_request]
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t qa-evening .
+      - run: docker run --rm qa-evening</code></pre>
+    <p>Во вкладке Actions появится запуск для отправленного изменения. Падение pytest вернёт ненулевой код, и шаг CI получит статус ошибки. В Jenkins те же команды выполняют в этапах сборки и тестирования. Для ночной регрессии задают запуск по расписанию. В процессе CD успешные проверки могут быть условием перехода к доставке или развёртыванию новой версии.</p>
+    <h4>Практика</h4>
+    <p>В учебной ветке уберите обработку пробелов, отправьте изменение и откройте вывод шага с тестами. Найдите имя упавшего случая. Восстановите код и отправьте исправление. Работа закончена, когда вы можете показать коллеге два запуска и объяснить, какое изменение сделало их результаты разными.</p>
+  </div>
+</details>
+</section>
