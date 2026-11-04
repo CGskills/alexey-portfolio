@@ -19,3 +19,14 @@
   text-decoration: none;
 }
 .case-pager a:hover { background: #eee5da; }
+
+.course-preview {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: clamp(420px, 75vh, 720px);
+  background: #f7f4ed;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
