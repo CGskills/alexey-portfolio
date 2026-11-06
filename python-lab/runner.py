@@ -1,3 +1,4 @@
+import builtins as _builtins
 import ast as _ast
 import sys as _sys
 import json as _json
@@ -169,8 +170,15 @@ async def _execute(code, checks_json, input_text, tracing=True):
             is_prompt = True
             try: print(prompt, end='')
             finally: is_prompt = False
+        interactive = globals().get('_interactive_input')
+        if callable(interactive):
+            answer = str(interactive(str(prompt)))
+            is_prompt = True
+            try: print(answer)
+            finally: is_prompt = False
+            return answer
         try: return next(inputs)
-        except StopIteration: raise EOFError('Добавь строки в поле «Ввод для input()».')
+        except StopIteration: raise EOFError('Для ввода значения нажми «Запустить». В проверках используется контрольный ввод.')
     def trace(frame, event, arg):
         nonlocal steps
         if frame.f_code.co_filename != 'main.py': return None
@@ -186,6 +194,8 @@ async def _execute(code, checks_json, input_text, tracing=True):
     ns = module.__dict__
     ns.update({'__name__':'__main__', 'input':read_input})
     _sys.modules['__main__'] = module
+    original_input = _builtins.input
+    _builtins.input = read_input
     original_stdout, original_stderr = _sys.stdout, _sys.stderr
     original_handlers, original_level = _logging.root.handlers, _logging.root.level
     _logging.root.handlers = []
@@ -243,6 +253,7 @@ async def _execute(code, checks_json, input_text, tracing=True):
         try: handler.close()
         except Exception: pass
     _logging.root.handlers, _logging.root.level = original_handlers, original_level
+    _builtins.input = original_input
     _sys.stdout, _sys.stderr = original_stdout, original_stderr
     if old_main is not None: _sys.modules['__main__'] = old_main
     else: _sys.modules.pop('__main__', None)
@@ -602,3 +613,4 @@ async def _network_probe(repo_cls,service_cls,mode):
     return False
 
 _COURSE_PROBES = ['_io_probe','_junior_expected','_binary_probe','_linear_probe','_window_probe','_stock_probe','_context_probe','_suite_probe','_suite_mutation','_class_suite_mutation','_lru_probe','_atomic_list_probe','_concurrency_probe','_timeout_probe','_cancel_probe','_batch_copy_probe','_migration_copy_probe','_version_cache_probe','_lazy_probe','_matrix_copy_probe','_ledger_probe','_network_repo_probe','_network_probe']
+
