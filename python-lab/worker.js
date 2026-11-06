@@ -29,6 +29,22 @@ self.onmessage = async ({data}) => {
   busy = true;
   activeId = data.id; buffer = ''; lastFlush=performance.now();
   try {
+    let inputNumber=0;
+    python.globals.set('_interactive_input', data.inputChannel ? prompt => {
+      flush();
+      const request=crypto.randomUUID();
+      postMessage({type:'input',id:activeId,request,prompt:String(prompt),number:++inputNumber});
+      for(;;){
+        const xhr=new XMLHttpRequest();
+        xhr.open('POST',new URL('./__python_input__',import.meta.url).href,false);
+        xhr.setRequestHeader('Content-Type','application/json');
+        xhr.send(JSON.stringify({channel:data.inputChannel,request}));
+        if(xhr.status!==200)throw Error('Не удалось получить ввод. Запусти код ещё раз.');
+        const response=JSON.parse(xhr.responseText);
+        if(response.cancelled)throw Error('Ввод отменён.');
+        if(!response.waiting)return response.value;
+      }
+    } : null);
     python.globals.set('_user_code', data.code);
     python.globals.set('_user_checks', JSON.stringify(data.checks || []));
     const inputs = data.validationInputs?.length ? data.validationInputs : [data.input || ''];
@@ -48,3 +64,4 @@ self.onmessage = async ({data}) => {
   } catch(error) { flush(); postMessage({type:'error',id:activeId,message:String(error)}); }
   finally { busy=false; }
 };
+
