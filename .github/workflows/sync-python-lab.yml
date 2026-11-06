@@ -1,14 +1,8 @@
-name: Sync Python lab and publish Pages
+name: Publish portfolio and Python lab
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '23 * * * *'
   push:
     branches: [main]
-    paths:
-      - 'scripts/sync-python-lab.py'
-      - 'scripts/python-lab-files.json'
-      - '.github/workflows/sync-python-lab.yml'
 permissions:
   contents: write
   pages: write
@@ -27,17 +21,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Download and verify published files
-        run: python scripts/sync-python-lab.py
-      - name: Save synchronized files
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add python-lab
-          if ! git diff --staged --quiet; then
-            git commit -m "Sync Python lab from Sites"
-            git push
-          fi
       - name: Prepare complete portfolio
         run: |
           mkdir -p _pages
