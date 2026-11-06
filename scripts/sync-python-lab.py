@@ -29,6 +29,7 @@ with tempfile.TemporaryDirectory() as temp:
             if name.endswith((".html", ".css", ".js", ".mjs")) and not name.startswith("python/"):
                 text = body.decode("utf-8")
                 for ref in re.findall(r"""['"\(]([^'"\s<>\)]+)['"\)]""", text):
+                    if not ref.startswith(("./", "../", "assets/", "audio/", "fonts/", "qa/")): continue
                     parsed = urllib.parse.urlparse(urllib.parse.urljoin(BASE + name, ref))
                     if parsed.netloc != urllib.parse.urlparse(BASE).netloc: continue
                     candidate = urllib.parse.unquote(parsed.path).lstrip("/")
